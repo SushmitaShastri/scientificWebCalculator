@@ -1,0 +1,135 @@
+<html>
+<head>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+      <script>
+      	// function for calculator backspace button
+      	function backspace() 
+      	{
+		    var value = document.getElementById("display").value;
+		    document.getElementById("display").value = value.substr(0, value.length - 1);
+		}
+		function toggleElement() 
+		{
+		  var x = document.getElementById("history");
+		  if (x.style.display === "none") 
+		  {
+		    x.style.display = "block";
+		  } else {
+		    x.style.display = "none";
+		  }
+		}
+		function clearHistory()
+		{
+			var r = confirm("are you sure want to clear history?")
+			if (r == true) {
+			  window.location.href='/clearHistory';
+			}
+		}
+		function changeNumberSystem(numSystem)
+		{
+			var numSystem = numSystem;
+			window.location.href="/changeNumSystem?numSystem="+numSystem;
+		}
+		function convertTo(toSystem)
+		{
+			var toSystem=toSystem;
+			var question = document.getElementById("display").value;
+			window.location.href="/changeToSystem?changeTo="+toSystem+"&question="+question;
+		}
+
+		function typeAlphabet(alpha)
+		{
+			var alpha = alpha;
+			var numSystem = document.getElementById("numSystem").value;
+			if(numSystem=="hexaDecimal")
+			{
+				calculator.display.value += alpha;
+			}
+		}
+		</script>
+</head>
+   <body>
+      <div class="container">
+      <input type="hidden" name="numSystem" id="numSystem" value={{numSystem}}>
+      <div id="history" style="display:none">
+      	<button class="clearButton" style="width:280px;height:35px;" onclick="clearHistory()">Clear History</button>
+      	<br><h3>HISTORY</h3><hr>
+      	{%if data%}
+      		<pre>{{data}}</pre>
+      	{% endif %}
+      </div>
+		<fieldset id="container">
+			   	 <table class="tbl">
+			   	 		<tr>
+			            	<th>Number System:</th>
+			            	<td>{{numSystem}}</td>
+			         	</tr>
+			            <tr>
+			               <th>Calculate: </th>
+			               <td>
+			               {% if question %}
+					    		{{question}}
+						    {% endif %} 
+						   </td>     
+			            </tr>
+      			</table>
+			<form name="calculator" action = "http://localhost:5000/result" method="post">
+				{% if answer %}
+					<input id="display" type="text" value="{{answer}}" name="display" readonly>
+				{% else %}
+					<input id="display" type="text" name="display" value="" readonly>
+				{% endif %} 
+				<input class="button digits" type="button" value="7" onclick="calculator.display.value += '7'">
+				<input class="button digits" type="button" value="8" onclick="calculator.display.value += '8'">
+				<input class="button digits" type="button" value="9" onclick="calculator.display.value += '9'">
+				<!-- <input class="button mathButtons" type="button" value="+" onclick="calculator.display.value += '+'"> -->
+				<input class="button backspaceBtn" id="bks" type="button" value="<<" onclick="backspace()">
+				<input class="button scientific" type="button" value="sin" onclick="calculator.display.value += 'sin('">
+				<input class="button numSystem" type="button" value="grey" onclick="changeNumberSystem('grey')">
+				<input class="button digits" id="a"  type="button" value="a" onclick="typeAlphabet('a')">
+				<br>
+				<input class="button digits" type="button" value="4" onclick="calculator.display.value += '4'">
+				<input class="button digits" type="button" value="5" onclick="calculator.display.value += '5'">
+				<input class="button digits" type="button" value="6" onclick="calculator.display.value += '6'">
+				<input class="button mathButtons" type="button" value="-" onclick="calculator.display.value += '-'">
+				<input class="button scientific" type="button" value="cos" onclick="calculator.display.value += 'cos('">
+				<input class="button numSystem" type="button" value="bin" onclick="changeNumberSystem('binary')">
+				<input class="button digits" id="b" type="button" value="b" onclick="typeAlphabet('b')">
+				<br>
+				<input class="button digits" type="button" value="1" onclick="calculator.display.value += '1'">
+				<input class="button digits" type="button" value="2" onclick="calculator.display.value += '2'">
+				<input class="button digits" type="button" value="3" onclick="calculator.display.value += '3'">
+				<input class="button mathButtons" type="button" value="x" onclick="calculator.display.value += '*'">
+				<input class="button scientific" type="button" value="tan" onclick="calculator.display.value += 'tan('">
+				<input class="button numSystem" type="button" value="hex" onclick="changeNumberSystem('hexaDecimal')">
+				<input class="button digits" id="c" type="button" value="c" onclick="typeAlphabet('c')">
+				<br>
+				<input id="clearButton" class="button clearButton" type="button" value="C" onclick="calculator.display.value = ''">
+				<input class="button digits" type="button" value="0" onclick="calculator.display.value += '0'">
+				<input class="button digits" type="button" value="." onclick="calculator.display.value += '.'">
+				<input class="button mathButtons" type="submit" value="=" >
+				<input class="button numSystem" style="width:92px" type="button" value="dec" onclick="changeNumberSystem('decimal')">
+				<input class="button digits" type="button" id="d" value="d" onclick="typeAlphabet('d')">
+				<br>
+				<input class="button backspaceBtn" type="button" value="(" onclick="calculator.display.value += '('">
+				<input class="button backspaceBtn" type="button" value=")" onclick="calculator.display.value += ')'"> 
+				<input class="button mathButtons" type="button" value="/" onclick="calculator.display.value += '/'">
+				<input class="button mathButtons" type="button" value="+" onclick="calculator.display.value += '+'">
+				<input class="button toNumSystem" style="width:92px"  type="button" value="to dec" onclick="convertTo('decimal')">
+				<input class="button digits" id="e" type="button" value="e" onclick="typeAlphabet('e')">
+				<br>
+				<!-- <input class="button numSystem" style="width:92px" type="button" value="grey to bin" onclick="convertTo('binary')"> -->
+				<input class="button toNumSystem" style="width:92px" type="button" value="to bin" onclick="convertTo('binary')">
+				<input class="button toNumSystem" style="width:92px" type="button" value="to grey" onclick="convertTo('grey')">
+				<input class="button toNumSystem" style="width:92px" type="button" value="to hex" onclick="convertTo('hexaDecimal')">
+				<input class="button digits" type="button" id="f" value="f" onclick="typeAlphabet('f')"><br>
+				<input class="button historyToggleBtn" value="hide/show history" type="button" style="width:345px" onclick="toggleElement()">
+				<!-- <input class="button numSystem" type="button" value="dec" onclick="changeNumberSystem('decimal')"> -->
+			</form>
+		</fieldset><br>
+	</div>
+	<!-- <div class="historyToggleDiv">
+		<button class="historyToggleBtn" onclick="toggleElement()">Hide/Show History</button>
+	</div> -->
+   </body>
+</html>

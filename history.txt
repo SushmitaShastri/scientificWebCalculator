@@ -1,0 +1,7 @@
+sin(96 = NaN
+sin(96) = 0.983588
+sin(96) = 0.983588
+0.983588(decimal) convert to grey = NaN
+(decimal) convert to decimal = NaN
+cos(69)/sin(96) = 1.009966
+.0 = 0.0
